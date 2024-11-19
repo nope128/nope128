@@ -1,0 +1,47 @@
+#include <iostream>
+#include <chrono>
+#include <ctime>
+
+using namespace std;
+
+int binary_search(int arr[], int low, int high, int query);
+
+int main() {
+    auto start = chrono::high_resolution_clock::now();
+
+    int arr[] = {2, 8, 12, 23, 30, 32, 43, 45, 51, 59, 65, 67, 78, 80, 85, 88, 92, 99, 100, 112, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165};
+    int query = 165;
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    cout << "Array size: " << n << endl;
+
+    int result = binary_search(arr, 0, n - 1, query);
+
+    if (result != -1)
+        cout << "Element is present at index " << result << endl;
+    else
+        cout << "Element is not present" << endl;
+
+    auto stop = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::nanoseconds>(stop - start).count();
+
+    cout << "Duration is " << duration << " nanoseconds" << endl;
+
+    return 0;
+}
+
+int binary_search(int arr[], int low, int high, int query) {
+    if (high >= low) {
+        int mid = low + (high - low) / 2;
+
+        if (arr[mid] == query)
+            return mid;
+
+        if (arr[mid] > query)
+            return binary_search(arr, low, mid - 1, query);
+
+        return binary_search(arr, mid + 1, high, query);
+    }
+
+    return -1;
+}
