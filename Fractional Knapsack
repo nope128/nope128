@@ -1,0 +1,50 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+struct Item {
+    int weight;
+    int value;
+    int index;
+};
+bool compare(Item a, Item b) {
+    double r1 = (double)a.value / a.weight;
+    double r2 = (double)b.value / b.weight;
+    return r1 > r2;
+}
+double fractionalKnapsack(int W, Item items[], int n) {
+    sort(items, items + n, compare);
+    double totalValue = 0.0;
+    cout << "\nItems taken in the knapsack:\n";
+    for (int i = 0; i < n; i++) {
+        if (items[i].weight <= W) {
+            W -= items[i].weight;
+            totalValue += items[i].value;
+            cout << "Item " << items[i].index << " (Weight: " << items[i].weight 
+                 << ", Profit: " << items[i].value << ") taken fully.\n";
+        } else {
+            double fraction = (double)W / items[i].weight;
+            totalValue += items[i].value * fraction;
+            cout << "Item " << items[i].index << " (Weight: " << items[i].weight 
+                 << ", Profit: " << items[i].value << ") taken partially (" 
+                 << fraction * 100 << "%).\n";
+            break;
+        }
+    }
+    return totalValue;
+}
+int main() {
+    int W, n;
+    cout << "Enter the maximum capacity of the knapsack: ";
+    cin >> W;
+    cout << "Enter the number of items: ";
+    cin >> n;
+    Item items[n];
+    for (int i = 0; i < n; i++) {
+        cout << "Enter weight and Profit of item " << i + 1 << ": ";
+        cin >> items[i].weight >> items[i].value;
+        items[i].index = i + 1;
+    }
+    double maxValue = fractionalKnapsack(W, items, n);
+    cout << "\nMaximum value in Knapsack = " << maxValue << endl;
+    return 0;
+}
